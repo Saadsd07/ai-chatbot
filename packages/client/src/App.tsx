@@ -3,7 +3,7 @@ import './App.css'
 
 function App() {
   const [message, setMessage] = useState("");
-  
+
   useEffect(()=>{
     fetch('/api/hello')
       .then(res => res.json())
@@ -12,7 +12,7 @@ function App() {
   },[])
 
   return (
-    <div>{message}</div>
+    <div className='bg-red-200'>{message}</div>
   )
 }
 
