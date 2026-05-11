@@ -5,7 +5,7 @@ import { chatController } from './controllers/chat.controller';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
-   res.send('hello world');
+   res.send('hello world!');
 });
 
 router.get('/api/hello', (req: Request, res: Response) => {
