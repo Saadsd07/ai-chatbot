@@ -3,6 +3,14 @@ import { useState } from 'react';
 import ChatInput, { type ChatFormData } from './ChatInput';
 import ChatMessage, { type Message } from './ChatMessage';
 import TypingIndicator from './TypingIndicator';
+import popSound from '@/assets/sounds/pop.mp3';
+import notificationSound from '@/assets/sounds/notification.mp3';
+
+const popAudio = new Audio(popSound);
+popAudio.volume = 0.2;
+
+const notificationAudio = new Audio(notificationSound);
+notificationAudio.volume = 0.2;
 
 type chatResponse = {
    message: string;
@@ -17,9 +25,11 @@ const Chatbot = () => {
 
    async function onSubmit({ prompt }: ChatFormData) {
       try {
-         setError('');
          setMessages((prev) => [...prev, { content: prompt, role: 'user' }]);
+         setError('');
+         popAudio.play();
          setIsBotTyping(true);
+
          const { data } = await axios.post<chatResponse>('/api/chat', {
             prompt: prompt,
             conversationId: conversationId,
@@ -28,6 +38,7 @@ const Chatbot = () => {
             ...prev,
             { content: data.message, role: 'model' },
          ]);
+         notificationAudio.play();
       } catch (e) {
          console.log(e);
          setError('Something went wrong. Please try again.');
