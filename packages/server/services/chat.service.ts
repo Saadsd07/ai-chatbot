@@ -1,9 +1,18 @@
-import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
+import path from 'path';
 import { conversationRepository } from '../repositories/conversation.repositories';
+import { GoogleGenAI } from '@google/genai';
+import template from '../prompts/chatbot.txt';
 
 const client = new GoogleGenAI({
    apiKey: process.env.GOOGLE_API_KEY,
 });
+
+const parkInfo = fs.readFileSync(
+   path.join(__dirname, '..', 'prompts', 'WonderWorld.md'),
+   'utf-8'
+);
+const instructions = template.replace('{{parkInfo}}', parkInfo);
 
 type ChatResponse = {
    message: string;
@@ -37,7 +46,8 @@ export const chatService = {
 
          config: {
             temperature: 0.3,
-            maxOutputTokens: 180,
+            maxOutputTokens: 300,
+            systemInstruction: instructions,
          },
       });
 
